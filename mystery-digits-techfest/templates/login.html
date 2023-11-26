@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+    <div id="user-info-form">
+        <form>
+            <p style="color:red" id="error"></p>
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" required>
+            <br>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <br>
+
+            <input type="button" value="Next" onclick="onNextButtonClick()">
+        </form>
+    </div>
+
+    <div id="continue-with-google" class="hidden">
+        <button onclick="window.location='/login_google'" id="google-btn">Continue with Google</button>
+    </div>
+
+    <script>
+        function onNextButtonClick() {
+            var phone = $('#phone').val();
+            var name = $('#name').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/getDetails', 
+                data: { phone: phone, name: name },
+                success: function(response) {
+                    $("#user-info-form").fadeOut(500, function() {
+                        $("#continue-with-google").removeClass("hidden").hide().fadeIn(500);
+                    });
+                },
+                error: function(error) {
+                    $("#error").text("Error or Number Already exists!");
+                }
+            });
+        }
+
+        
+    </script>
+
+</body>
+</html>
