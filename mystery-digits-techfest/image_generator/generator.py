@@ -2,6 +2,7 @@
 
 from PIL import Image, ImageDraw, ImageFont
 import random
+import os
 
 def draw_complex_patterns(draw, width, height, num_complex_shapes):
     for _ in range(int(num_complex_shapes * 0.5)):
@@ -69,16 +70,16 @@ def generate_and_get_digits(width, height, num_digits,filename):
     digits = [digit for _, _, _, digit in digits_positions]
 
     # Save the image
-    image.save(filename)
+    directory = os.getcwd()+"/static/"
+
+    # Ensure the directory exists, create it if necessary
+
+    # Construct the full path including the directory and filename
+    full_path = os.path.join(directory, filename)
+
+    # Save the image to the specified path
+    image.save(full_path)
 
     return digits
 
-if __name__ == "__main__":
-    # Example of usage
-    num_digits = int(input("Enter the number of digits: "))
-    width, height = 800, 600
-
-    digits_in_image = generate_and_get_digits(width, height, num_digits,"save.png")
-    print("Digits in the image:", digits_in_image)
-    print("Image generated and saved as 'save.png'.")
 

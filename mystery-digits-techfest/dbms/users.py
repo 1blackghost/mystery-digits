@@ -25,7 +25,8 @@ def reset_back_to_start() -> None:
                      phone TEXT,
                      email TEXT,
                      profile_url TEXT,
-                     current_level INTEGER
+                     current_level INTEGER,
+                     tries INTEGER DEFAULT 5
                      )''')
 
     conn.commit()
@@ -48,8 +49,8 @@ def insert_user(username: str, phone: str, email: str, profile_url: str, current
     conn = sqlite3.connect(DATABASE_NAME)
     c = conn.cursor()
 
-    c.execute("INSERT INTO user (username, phone, email, profile_url, current_level) VALUES (?, ?, ?, ?, ?)",
-              (username, phone, email, profile_url, 1))  # Force current_level to be 1
+    c.execute("INSERT INTO user (username, phone, email, profile_url, current_level, tries) VALUES (?, ?, ?, ?, ?, ?)",
+              (username, phone, email, profile_url, current_level, 5))  # Force current_level to be 1, tries default to 5
 
     conn.commit()
     conn.close()
@@ -72,7 +73,7 @@ def read_users() -> list:
 
     return result
 
-def update_user(email: str, username=None, phone=None, profile_url=None, current_level=None) -> None:
+def update_user(email: str, username=None, phone=None, profile_url=None, current_level=None, tries=None) -> None:
     """
     Update user information in the 'user' table based on the provided email.
 
@@ -82,6 +83,7 @@ def update_user(email: str, username=None, phone=None, profile_url=None, current
         phone: Updated phone number (if provided).
         profile_url: Updated profile URL (if provided).
         current_level: Updated current level (if provided).
+        tries: Updated number of tries (if provided).
 
     Returns:
         None
@@ -107,6 +109,10 @@ def update_user(email: str, username=None, phone=None, profile_url=None, current
     if current_level is not None:
         update_query += "current_level=?, "
         update_values.append(current_level)
+
+    if tries is not None:
+        update_query += "tries=?, "
+        update_values.append(tries)
 
     # Remove the trailing comma and space
     update_query = update_query.rstrip(", ")

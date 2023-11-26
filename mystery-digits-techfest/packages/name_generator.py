@@ -10,7 +10,7 @@ def generate_randomest_string(length=10):
     Returns:
     - str: The generated random string.
     """
-    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[{]};:'\",<.>/?`~"
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     return nanoid.generate(alphabet, size=length)
 
 if __name__ == "__main__":

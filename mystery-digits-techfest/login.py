@@ -23,10 +23,13 @@ flow = Flow.from_client_secrets_file(
 def find_dup():
 	data=users.read_users()
 	for i in data:
-		if i[3]==session["email"]:
+		if str(i[3])==str(session["email"]):
 			session["level"]=i[5]
+			session["tries"]=i[6]
 			return True
 	session["level"]=1
+	session["tries"]=5
+
 	return False
 
 
@@ -84,7 +87,6 @@ def callback():
 	session["google_id"] = id_info.get("sub")
 	session["email"] = id_info.get("email")
 	session["pic"] = id_info.get("picture")
-	print("[+++]profile: ",session["pic"])
 	val=find_dup()
 	if not val:
 		users.insert_user(session['name'],session["phone"],session["email"],session["pic"])

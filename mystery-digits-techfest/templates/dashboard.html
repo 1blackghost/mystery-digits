@@ -1,2 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Web Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
 <p>logged in</p>
 <p>current level: {{lvl}}</p>
+<img src="{{filename}}">
+<p>chances left : {{tries}}</p>
+
+<p style="color:red" id="error"></p>
+<form id="gameForm">
+    <label for="levelInput">Enter Level:</label>
+    <input type="number" id="val" name="levelInput" required>
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+$(document).ready(function(){
+    $("#gameForm").submit(function(e){
+        e.preventDefault();
+
+        var val = $("#val").val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/game',
+            data: { val: val },
+            success: function(response){
+               $("#error").text("success");
+               window.location='/game';
+            },
+            error: function(error){
+                $("#error").text("wrong guess");
+
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>
