@@ -13,6 +13,8 @@ def privacy():
 	return render_template("privacy.html")
 @app.route("/")
 def home():
+    if "email" in session:
+        return redirect("/game")
     return render_template("index.html")
 
 with app.app_context():

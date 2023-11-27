@@ -9,9 +9,9 @@
 <body>
 
 <p>logged in</p>
-<p>current level: {{lvl}}</p>
-<img src="{{filename}}">
-<p>chances left : {{tries}}</p>
+<p>current level: <span id="level">{{lvl}}</span></p>
+<img id="profileImage" src="{{filename}}">
+<p>chances left : <span id="tries">{{tries}}</span></p>
 
 <p style="color:red" id="error"></p>
 <form id="gameForm">
@@ -20,8 +20,67 @@
     <button type="submit">Submit</button>
 </form>
 
+<!-- Leaderboard table -->
+<table id="leaderboardTable" border="1">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Level</th>
+            <th>Time</th>
+            <th>Profile</th>
+        </tr>
+    </thead>
+    <tbody id="leaderboardBody">
+        <!-- Leaderboard rows will be added dynamically here -->
+    </tbody>
+</table>
+
 <script>
 $(document).ready(function(){
+    // Function to get and display leaderboard
+    function getLeaderboard() {
+        $.ajax({
+            type: 'GET',
+            url: '/getL',
+            success: function(response){
+                console.log("Success. Response:", response);
+
+                // Clear existing leaderboard rows
+                $("#leaderboardBody").empty();
+
+                // Check if the response is an array
+                if (Array.isArray(response)) {
+                    // Add new rows to the leaderboard table
+                    $.each(response, function(index, entry) {
+                        // Accessing the inner array elements
+                        $("#leaderboardBody").append(
+                            "<tr><td>" + entry[0] + "</td>" +
+                            "<td>" + entry[1] + "</td>" +
+                            "<td>" + entry[2] + "</td>" +
+                            "<td>" + entry[3] + "</td>" +
+                            "<td><img src='" + entry[4] + "' alt='Profile'></td></tr>"
+                        );
+                    });
+                } else {
+                    console.error("Invalid response format. Expected an array.");
+                }
+            },
+            error: function(error){
+                console.error("Error fetching leaderboard: ", error);
+            }
+        });
+    }
+
+    // Call the function to get and display the leaderboard on page load
+    getLeaderboard();
+
+    // Set up interval to update leaderboard every 2 seconds
+    setInterval(function() {
+        getLeaderboard();
+    }, 2000);
+
+    // Submit form function remains unchanged
     $("#gameForm").submit(function(e){
         e.preventDefault();
 
@@ -32,12 +91,32 @@ $(document).ready(function(){
             url: '/game',
             data: { val: val },
             success: function(response){
-               $("#error").text("success");
-               window.location='/game';
+                $("#profileImage").fadeOut(300, function() {
+                    $(this).attr("src", response.filepath).fadeIn(300);
+                });
+                
+                $("#level").fadeOut(300, function() {
+                    $(this).text(response.level).fadeIn(300);
+                });
+
+                $("#tries").fadeOut(300, function() {
+                    $(this).text(response.tries).fadeIn(300);
+                });
+
+                $("#error").text("Success").fadeIn(300).delay(2000).fadeOut(300);
             },
             error: function(error){
-                $("#error").text("wrong guess");
-
+                if (error.responseJSON.continue === "false"){
+                    window.location = "/ended";
+                }                
+                $("#error").fadeOut(300, function() {
+                    $(this).text("Wrong guess").fadeIn(300).delay(2000).fadeOut(300);
+                });
+                if (error.responseJSON && error.responseJSON.tries) {
+                    $("#tries").fadeOut(300, function() {
+                        $(this).text(error.responseJSON.tries).fadeIn(300);
+                    });
+                }
             }
         });
     });

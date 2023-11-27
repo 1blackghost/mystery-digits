@@ -21,26 +21,26 @@ def reset_back_to_start() -> None:
     if a in ("y", "yes"):
         c.execute('''CREATE TABLE IF NOT EXISTS user
                     (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                     username TEXT,
-                     phone TEXT,
+                     username TEXT DEFAULT NULL,
+                     phone TEXT DEFAULT NULL,
                      email TEXT,
-                     profile_url TEXT,
-                     current_level INTEGER,
+                     profile_url TEXT DEFAULT NULL,
+                     current_level INTEGER DEFAULT 1,
                      tries INTEGER DEFAULT 5
                      )''')
 
     conn.commit()
     conn.close()
 
-def insert_user(username: str, phone: str, email: str, profile_url: str, current_level: int = 1) -> None:
+def insert_user(email: str, phone: str = "", username: str = "", profile_url: str = "", current_level: int = 1) -> None:
     """
     Insert a user into the 'user' table.
 
     Args:
         username: User's username.
-        phone: User's phone number.
-        email: User's email.
-        profile_url: URL to the user's profile.
+        phone: User's phone number (default is an empty string).
+        email: User's email (default is an empty string).
+        profile_url: URL to the user's profile (default is an empty string).
         current_level: User's current level (default is 1).
 
     Returns:
@@ -50,7 +50,7 @@ def insert_user(username: str, phone: str, email: str, profile_url: str, current
     c = conn.cursor()
 
     c.execute("INSERT INTO user (username, phone, email, profile_url, current_level, tries) VALUES (?, ?, ?, ?, ?, ?)",
-              (username, phone, email, profile_url, current_level, 5))  # Force current_level to be 1, tries default to 5
+              (username, phone, email, profile_url, current_level, 5))  # Use the passed current_level, tries default to 5
 
     conn.commit()
     conn.close()

@@ -27,10 +27,6 @@ def find_dup():
 			session["level"]=i[5]
 			session["tries"]=i[6]
 			return True
-	session["level"]=1
-	session["tries"]=5
-
-	return False
 
 
 def login_is_required(function):
@@ -88,7 +84,10 @@ def callback():
 	session["email"] = id_info.get("email")
 	session["pic"] = id_info.get("picture")
 	val=find_dup()
-	if not val:
-		users.insert_user(session['name'],session["phone"],session["email"],session["pic"])
+	if val:
+		users.update_user(email=session["email"],username=session['name'],phone=session["phone"],profile_url=session["pic"])
+	else:
+		session.clear()
+		return render_template("index.html",err="you have not registered!")
 
 	return redirect("/game")
