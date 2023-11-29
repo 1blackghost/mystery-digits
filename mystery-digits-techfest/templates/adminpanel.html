@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+  <div>
+    <h2>Admin Panel</h2>
+    <form id="adminForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required><br>
+
+      <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    function submitForm() {
+      var email = $("#email").val();
+
+      // You should perform client-side validation here
+
+      $.ajax({
+        type: "POST",
+        url: "/adminPanel",
+        data: { email: email },  // Send as form data
+        success: function(response) {
+          // Handle the response from the server
+          console.log(response);
+          alert("Email submitted successfully!");
+        },
+        error: function(error) {
+          // Handle errors
+          console.error(error);
+          alert("Error submitting email. Please try again.");
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
+
