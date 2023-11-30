@@ -2,58 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0  maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
     <title>User Information</title>
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
-
-    <div id="user-info-form">
-        <form>
-            <p style="color:red" id="error"></p>
-            <label for="phone">Phone Number:</label>
-            <input type="text" id="phone" name="phone" required>
-            <br>
-
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            <br>
-
-            <input type="button" value="Next" onclick="onNextButtonClick()">
-        </form>
+    <div class="login_container" id="login">
+        <nav><img src="../static/images/Tantra White.png" class="logo">
+        <h4>Mystery<br>Digits</h4></nav>
+        <div class="login">
+            <h5>Login</h5>
+            <input type="name" class="name" placeholder="Name" id="name" name="name" required/>
+            <input type="number" class="number" placeholder="Registered Phone Number" id="phone" name="phone" required/>
+            <input type="button" class="next" value="Next" onclick="this.style.backgroundColor='rgb(75,75,75)'" onclick="onNextButtonClick()"/>
+            <span class="bar"> Click next then sign-in with google </span>
+            <button class="google" onclick="window.location='/login_google'" id="google-btn"><span class="icon"></span>Google</button>
+        </div>
+        <span class="not_registered">Not Registered ? <a href=""><b>Register</b></a></span>
     </div>
 
-    <div id="continue-with-google" class="hidden">
-        <button onclick="window.location='/login_google'" id="google-btn">Continue with Google</button>
+    <div class="rules_container" id="rules">
+        <nav><img src="../static/images/Tantra Black.png" class="logo">
+        <h2>Mystery Digits</h2>
+        </nav>
+        <div class="rules">
+            <h3>Rules &<br>Regulations</h3>
+            <p>Please take a moment to review and accept
+                our terms and conditions before using our service.<br>
+                <b>1. Acceptance of Terms:</b> By accessing and using the Mystry Digits App, you agree to
+                    the terms and conditions.
+            </p>
+        </div>
+        <div class="accept">
+            <span><input type="checkbox" id="checkbox" onchange="document.getElementById('continue').disabled = !this.checked;"/> I agree with <b>Rules and Regulations</b></span>
+            <input type="submit" disabled="true" class="continue" id="continue" value="Continue" onclick="login()"/>
+        </div>
     </div>
-
-    <script>
-        function onNextButtonClick() {
-            var phone = $('#phone').val();
-            var name = $('#name').val();
-
-            $.ajax({
-                type: 'POST',
-                url: '/getDetails', 
-                data: { phone: phone, name: name },
-                success: function(response) {
-                    $("#user-info-form").fadeOut(500, function() {
-                        $("#continue-with-google").removeClass("hidden").hide().fadeIn(500);
-                    });
-                },
-                error: function(error) {
-                    $("#error").text("Error or Number Already exists!");
-                }
-            });
-        }
-
-        
-    </script>
+    <script src="{{url_for('static', filename='script/login.js')}}"></script>
 
 </body>
 </html>

@@ -1,0 +1,18 @@
+<div id="user-info-form">
+        <form>
+            <p style="color:red" id="error"></p>
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" required>
+            <br>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <br>
+
+            <input type="button" value="Next" onclick="onNextButtonClick()">
+        </form>
+    </div>
+
+    <div id="continue-with-google">
+        <button onclick="window.location='/login_google'" id="google-btn">Continue with Google</button>
+    </div>
