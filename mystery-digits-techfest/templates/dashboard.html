@@ -15,7 +15,7 @@
 
 <p style="color:red" id="error"></p>
 <form id="gameForm">
-    <label for="levelInput">Enter Level:</label>
+    <label for="levelInput">Enter Digits:</label>
     <input type="number" id="val" name="levelInput" required>
     <button type="submit">Submit</button>
 </form>
@@ -91,10 +91,13 @@ $(document).ready(function(){
             url: '/game',
             data: { val: val },
             success: function(response){
+                if (response.continue === "false"){
+                    window.location = "/ended";
+                }
                 $("#profileImage").fadeOut(300, function() {
                     $(this).attr("src", response.filepath).fadeIn(300);
                 });
-                
+
                 $("#level").fadeOut(300, function() {
                     $(this).text(response.level).fadeIn(300);
                 });
@@ -107,8 +110,10 @@ $(document).ready(function(){
             },
             error: function(error){
                 if (error.responseJSON.continue === "false"){
+                    document.body.innerHTML = '';
+
                     window.location = "/ended";
-                }                
+                }
                 $("#error").fadeOut(300, function() {
                     $(this).text("Wrong guess").fadeIn(300).delay(2000).fadeOut(300);
                 });
