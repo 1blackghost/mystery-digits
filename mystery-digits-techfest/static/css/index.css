@@ -1,7 +1,6 @@
 html,body{
     margin: 0px;
 }
-@media screen and (max-width:525px) {
     .container{
         height: 100vh;
         width: 100vw;
@@ -73,14 +72,13 @@ html,body{
         border-radius: 10px;
     }
     .socials{
-        position: absolute;
         bottom: 30px;
         width: fit-content;
         height: fit-content;
         display: flex;
         flex-direction:column ;
-        margin-left: -100px;
-        left: 50%;
+        margin-left:calc(50% - 100px );
+        margin-top: 15vh;
     }
     .contact{
         width: 200px;
@@ -98,6 +96,6 @@ html,body{
     a{
         text-decoration: none;
         color: whitesmoke !important;
-        padding: 10px;
+        padding: 15px;
+        font-size: 22px;
     }
-}

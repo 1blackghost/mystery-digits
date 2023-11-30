@@ -1,7 +1,6 @@
 html,body{
     margin: 0px;
 }
-@media screen and (max-width:525px) {
     /**Rules and regulation page start here**/
     .rules_container{
         height: 100vh;
@@ -168,6 +167,11 @@ html,body{
         position: absolute;
         top: 0;
         left: 0;
+        font-size: 35px;
+        font-weight: 300;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 5px;
     }
     .not_registered{
         display: block;
@@ -184,4 +188,3 @@ html,body{
         text-decoration: none;
         font-weight: bolder;
     }
-}

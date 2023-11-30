@@ -14,11 +14,15 @@
         <h4>Mystery<br>Digits</h4></nav>
         <div class="login">
             <h5>Login</h5>
-            <input type="name" class="name" placeholder="Name" id="name" name="name" required/>
+            <div id="user-info-form">
+         <form><input type="text" class="name" placeholder="Name" id="name" name="name" required/>
             <input type="number" class="number" placeholder="Registered Phone Number" id="phone" name="phone" required/>
             <input type="button" class="next" value="Next" onclick="this.style.backgroundColor='rgb(75,75,75)'" onclick="onNextButtonClick()"/>
+            </form></div>
             <span class="bar"> Click next then sign-in with google </span>
-            <button class="google" onclick="window.location='/login_google'" id="google-btn"><span class="icon"></span>Google</button>
+            <div id="continue-with-google">
+            <button class="google" onclick="window.location='/login_google'" id="google-btn"><span class="icon"><i class="fa-brands fa-google"></i></span>Google</button>
+                </div>
         </div>
         <span class="not_registered">Not Registered ? <a href=""><b>Register</b></a></span>
     </div>
@@ -40,6 +44,7 @@
             <input type="submit" disabled="true" class="continue" id="continue" value="Continue" onclick="login()"/>
         </div>
     </div>
+    <script src="https://kit.fontawesome.com/f20e323662.js" crossorigin="anonymous"></script>
     <script src="{{url_for('static', filename='script/login.js')}}"></script>
 
 </body>
