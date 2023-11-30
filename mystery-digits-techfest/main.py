@@ -21,6 +21,7 @@ with app.app_context():
     #importing views from different files
     from login import *
     from dashboard import *
+    from admin import *
 
 
 
