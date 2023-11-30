@@ -1,4 +1,5 @@
 function onNextButtonClick() {
+	console.log("hi");
     var phone = $('#phone').val();
     var name = $('#name').val();
 
@@ -6,14 +7,14 @@ function onNextButtonClick() {
         type: 'POST',
         url: '/getDetails', 
         data: { phone: phone, name: name },
-        /**success: function(response) {
+        success: function(response) {
             $("#user-info-form").fadeOut(500, function() {
                 $("#continue-with-google").removeClass("hidden").hide().fadeIn(500);
             });
         },
         error: function(error) {
             $("#error").text("Error or Number Already exists!");
-        }**/
+        }
     });
 }
 function login(){

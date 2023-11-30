@@ -17,7 +17,10 @@ def end():
 
 @app.route("/game",methods=['GET','POST'])
 def game():
+
 	if request.method == "POST":
+		if "end" in session:
+			return jsonify({"error":"error"}),400
 
 		data = request.form
 		val = data.get('val')
@@ -69,6 +72,7 @@ def game():
 	if "email" in session:
 		level=int(session["level"])
 		if session["tries"]==0:
+			session["end"]=True
 			return redirect("/ended")
 		if "filepath" not in session:
 			filename=name_generator.generate_randomest_string(10)+".png"
@@ -84,7 +88,7 @@ def game():
 def logout():
 
 	if "email" in session:
-		path=session["filepath"]
+
 		session.clear()
-		session["filepath"]=path
+
 	return redirect("/")
