@@ -3,6 +3,25 @@ import random
 
 LEADERBOARD_DATABASE_NAME = 'leaderboard.db'
 
+def insert_all_leaderboard(data: list) -> None:
+    """
+    Insert a list of records into the 'leaderboard' table.
+
+    Args:
+        data: List of tuples containing records to be inserted.
+
+    Returns:
+        None
+    """
+    conn = sqlite3.connect(LEADERBOARD_DATABASE_NAME)
+    c = conn.cursor()
+    if len(data)>10:
+        data.remove(data[-1])
+    c.executemany("INSERT INTO leaderboard (rank, name, email, level, time, pic) VALUES (?, ?, ?, ?, ?, ?)", data)
+
+    conn.commit()
+    conn.close()
+
 def reset_leaderboard() -> None:
     """
     Reset the leaderboard database to the initial state.
@@ -20,8 +39,9 @@ def reset_leaderboard() -> None:
     c.execute("DROP TABLE IF EXISTS leaderboard")
     if a in ("y", "yes"):
         c.execute('''CREATE TABLE IF NOT EXISTS leaderboard
-                    (rank INTEGER PRIMARY KEY,
+                    (rank INTEGER ,
                      name TEXT DEFAULT NULL,
+                     email TEXT PPRIMARY KEY,
                      level INTEGER DEFAULT 1,
                      time INTEGER DEFAULT 0,
                      pic TEXT DEFAULT NULL
@@ -30,13 +50,14 @@ def reset_leaderboard() -> None:
     conn.commit()
     conn.close()
 
-def insert_leaderboard(rank: int, name: str, level: int, time: int, pic: str) -> None:
+def insert_leaderboard(rank: int, name: str, email: str, level: int, time: int, pic: str) -> None:
     """
     Insert a record into the 'leaderboard' table.
 
     Args:
         rank: Player's rank.
         name: Player's name.
+        email: Player's email (unique identifier).
         level: Player's level.
         time: Player's time.
         pic: Player's picture path.
@@ -48,37 +69,20 @@ def insert_leaderboard(rank: int, name: str, level: int, time: int, pic: str) ->
     c = conn.cursor()
 
     # Convert level to a single element list for compatibility
-    level = [level] if isinstance(level, int) else level
 
-    c.execute("INSERT INTO leaderboard (rank, name, level, time, pic) VALUES (?, ?, ?, ?, ?)",
-              (rank, name, str(level), time, pic))  # Convert level to string before insertion
+    c.execute("INSERT INTO leaderboard (rank, name, email, level, time, pic) VALUES (?, ?, ?, ?, ?, ?)",
+            (rank, name, email, level, time, pic))
+
 
     conn.commit()
     conn.close()
 
-def read_leaderboard() -> list:
+def update_leaderboard(email: str, level=None, time=None, pic=None) -> None:
     """
-    Read all records from the 'leaderboard' table.
-
-    Returns:
-        list: Records as a list of tuples.
-    """
-    conn = sqlite3.connect(LEADERBOARD_DATABASE_NAME)
-    c = conn.cursor()
-
-    c.execute("SELECT * FROM leaderboard")
-    result = c.fetchall()
-
-    conn.close()
-
-    return result
-
-def update_leaderboard(name: str, level=None, time=None, pic=None) -> None:
-    """
-    Update a record in the 'leaderboard' table based on the provided name.
+    Update a record in the 'leaderboard' table based on the provided email.
 
     Args:
-        name: Player's name (unique identifier).
+        email: Player's email (unique identifier).
         level: Updated level (if provided).
         time: Updated time (if provided).
         pic: Updated picture path (if provided).
@@ -107,11 +111,11 @@ def update_leaderboard(name: str, level=None, time=None, pic=None) -> None:
     # Remove the trailing comma and space
     update_query = update_query.rstrip(", ")
 
-    # Add the WHERE clause to update based on the name
-    update_query += " WHERE name=?"
+    # Add the WHERE clause to update based on the email
+    update_query += " WHERE email=?"
 
-    # Add the name value to the update_values list
-    update_values.append(name)
+    # Add the email value to the update_values list
+    update_values.append(email)
 
     # Execute the update query
     c.execute(update_query, tuple(update_values))
@@ -119,42 +123,46 @@ def update_leaderboard(name: str, level=None, time=None, pic=None) -> None:
     conn.commit()
     conn.close()
 
-def sortLb(lst: list) -> None:
+def get_all_leaders() -> list:
     """
-    Sort the provided list based on the level in descending order,
-    update the top 10 records in the leaderboard.
-
-    Args:
-        lst: List containing name, level, time, and pic.
+    Get all leaders from the 'leaderboard' table based on a specific criteria.
 
     Returns:
-        None
+        list: All leaders as a list of tuples.
     """
-    # Extract name, level, time, and pic from the list
-    name, level, time, pic = lst
+    conn = sqlite3.connect(LEADERBOARD_DATABASE_NAME)
+    c = conn.cursor()
 
-    # Ensure level is a list for consistency
-    level = [level] if not isinstance(level, list) else level
+    # Example: Fetching leaders based on the highest level
+    c.execute("SELECT * FROM leaderboard ORDER BY level DESC")
+    leaders = c.fetchall()
 
-    # Check if level has at least one element before sorting
-    if len(level) >= 1:
-        # Get the current leaderboard records
-        current_leaderboard = read_leaderboard()
+    conn.close()
 
-        # Combine the current records with the new data
-        combined_data = current_leaderboard + [(None, name, level, time, pic)]
+    return leaders
 
-        try:
-            # Sort the combined data based on the level in descending order
-            sorted_data = sorted(combined_data, key=lambda x: int(x[2][0]), reverse=True)[:10]
 
-            # Reset leaderboard and insert the top 10 records
-            reset_leaderboard()
-            for rank, (record_id, name, level, time, pic) in enumerate(sorted_data, start=1):
-                insert_leaderboard(rank, name, int(level[0]), time, pic)
-        except ValueError as e:
-            print(f"Error: {e}")
+def read_user(email: str) -> list:
+    """
+    Read details of a user from the 'leaderboard' table based on the provided email.
+
+    Args:
+        email: Player's email (unique identifier).
+
+    Returns:
+        list: Details of the user as a list of tuples, or 0 if the user doesn't exist.
+    """
+    conn = sqlite3.connect(LEADERBOARD_DATABASE_NAME)
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM leaderboard WHERE email=?", (email,))
+    result = c.fetchall()
+
+    conn.close()
+
+    if not result:
+        return False
     else:
-        print("Error: Level should have at least one element.")
+        return result
 
-# Additional function to generate random time for
+
