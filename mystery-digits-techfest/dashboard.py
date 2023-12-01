@@ -6,7 +6,7 @@ from packages import name_generator
 
 @app.route("/getL", methods=["GET"])
 def get_leaderboard():
-    data = leader.read_leaderboard()
+    data = leader.get_all_leaders()
     return jsonify(data)
 
 
@@ -35,20 +35,33 @@ def game():
 
 
 			session["level"]=int(session["level"])+1
-
+			last=leader.get_all_leaders()[-1]
+			if int(last[3])<int(session["level"]):
+				l_data=leader.get_all_leaders()
+				for i in l_data:
+					if i[2]==session["email"]:
+						l_data.remove(i)
+				l_data.append((0,session["name"],session["email"],session["level"],0,session["pic"]))
+				sorted_data = sorted(l_data, key=lambda x: x[3], reverse=True)
+				
+				for i, item in enumerate(sorted_data):
+					item = list(item)
+					item[0] = i + 1
+					sorted_data[i] = tuple(item)
+				leader.reset_leaderboard()
+				leader.insert_all_leaderboard(sorted_data)
 			users.update_user(session["email"],current_level=int(session["level"]))
 			session.pop("filepath")
 			level=session["level"]
 			filename=name_generator.generate_randomest_string(10)+".png"
 			session["filepath"]="/static/"+filename
-			session["digits"]=generator.generate_and_get_digits(800,600,level,filename)
+			session["digits"]=generator.generate_and_get_digits(1200,720,level,filename)
 			print(session["digits"])
 			level = session.get("level", None)
 			tries = session.get("tries", None)
 			filepath = session.get("filepath", None)
 
 			session_data = {"level": level, "tries": tries, "filepath": filepath}
-			leader.sortLb([session["name"],level,0,session["pic"]])
 			return jsonify(session_data),200
 
 		else:

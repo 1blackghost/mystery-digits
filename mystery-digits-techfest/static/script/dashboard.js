@@ -32,9 +32,9 @@ $(document).ready(function(){
                         $("#leaderboardBody").append(
                             "<tr><td>" + entry[0] + "</td>" +
                             "<td>" + entry[1] + "</td>" +
-                            "<td>" + entry[2] + "</td>" +
                             "<td>" + entry[3] + "</td>" +
-                            "<td><img src='" + entry[4] + "' alt='Profile' class='profile'></td></tr>"
+                            "<td>" + entry[4] + "</td>" +
+                            "<td><img src='" + entry[5] + "' alt='Profile' class='profile'></td></tr>"
                         );
                     });
                 } else {
@@ -73,7 +73,7 @@ $(document).ready(function(){
                     $(this).attr("src", response.filepath).fadeIn(300);
                 });
 
-                $("#level").fadeOut(300, function() {
+                $("#level1").fadeOut(300, function() {
                     $(this).text(response.level).fadeIn(300);
                 });
 
