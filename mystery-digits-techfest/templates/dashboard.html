@@ -2,131 +2,75 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
     <title>Your Web Page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/f20e323662.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
+<nav><img src="../static/images/Tantra Black.png" class="logo"><h2>Mystery Digits</h2></nav>
 
-<p>logged in</p>
-<p>current level: <span id="level">{{lvl}}</span></p>
-<img id="profileImage" src="{{filename}}">
-<p>chances left : <span id="tries">{{tries}}</span></p>
+<div class="overlay" id="overlay" style="display: none;">
+<div class="congartulation" id="congrats" style="display: none;">
+    <div class="right"><i class="fa-solid fa-check"></i></div>
+    <h4>Congratulations</h4>
+    <p>You have successfully completed level:<b id="level">{{lvl}}!</b></p>
+    <p>Total points:250</p>
+    <button class="next_level">Next Level</button>
+</div>
+<div class="error" id="error">
+    <div class="right"><i class="fa-solid fa-xmark"></i></div>
+    <h4>Error</h4>
+    <p>Operation could not be <br> Completed</p>
+    <button class="next_level">Try Again</button>
+</div>
+</div>
 
-<p style="color:red" id="error"></p>
-<form id="gameForm">
-    <label for="levelInput">Enter Digits:</label>
-    <input type="number" id="val" name="levelInput" required>
-    <button type="submit">Submit</button>
+<div class="option">
+    <button class="home" id="home" onclick="opt('0','80px','grey','black','homepage','leaderboardpage')">Home</button>
+    <button class="leaderboard" id="leadbod" onclick="opt('calc(100% - 195px)','195px','black','grey','leaderboardpage','homepage')">Leaderboard</button>
+    <span class="selection_line" id="line"></span>
+</div>
+
+
+<div class="home_page" id="homepage">
+<h3>Mystery Digit Quest</h3>
+<div class="contain">
+    <div class="level_point">
+        <span class="level"><i class="fa-solid fa-arrow-up-right-dots"></i> Level:<b id="level">{{lvl}}</b></span>
+        <span class="points">Points:<b>250</b></span>
+    </div>
+    <div class="tries"><i class="fa-regular fa-clock"></i>  No. of tries left:<b id="tries">{{tries}}</b></div>
+    <img id="profileImage" class="puzzle" src="{{filename}}">
+    <form id="gameForm">
+    <input type="number" id="val" class="answer" placeholder="Enter the numbers found" name="levelInput" required>
+    <button type="submit" class="submit">Submit</button>
 </form>
+</div>
+</div>
 
-<!-- Leaderboard table -->
-<table id="leaderboardTable" border="1">
-    <thead>
-        <tr>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Level</th>
-            <th>Time</th>
-            <th>Profile</th>
-        </tr>
-    </thead>
-    <tbody id="leaderboardBody">
-        <!-- Leaderboard rows will be added dynamically here -->
-    </tbody>
-</table>
 
-<script>
-$(document).ready(function(){
-    // Function to get and display leaderboard
-    function getLeaderboard() {
-        $.ajax({
-            type: 'GET',
-            url: '/getL',
-            success: function(response){
-                console.log("Success. Response:", response);
+<div class="leaderboard_page" id="leaderboardpage">
+    <h3>Top 10 in ranking</h3>
+    <table id="leaderboardTable">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Level</th>
+                <th>Time</th>
+                <th>Profile</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+            <!-- Leaderboard rows will be added dynamically here -->
+        </tbody>
+    </table>
+</div>
 
-                // Clear existing leaderboard rows
-                $("#leaderboardBody").empty();
-
-                // Check if the response is an array
-                if (Array.isArray(response)) {
-                    // Add new rows to the leaderboard table
-                    $.each(response, function(index, entry) {
-                        // Accessing the inner array elements
-                        $("#leaderboardBody").append(
-                            "<tr><td>" + entry[0] + "</td>" +
-                            "<td>" + entry[1] + "</td>" +
-                            "<td>" + entry[2] + "</td>" +
-                            "<td>" + entry[3] + "</td>" +
-                            "<td><img src='" + entry[4] + "' alt='Profile'></td></tr>"
-                        );
-                    });
-                } else {
-                    console.error("Invalid response format. Expected an array.");
-                }
-            },
-            error: function(error){
-                console.error("Error fetching leaderboard: ", error);
-            }
-        });
-    }
-
-    // Call the function to get and display the leaderboard on page load
-    getLeaderboard();
-
-    // Set up interval to update leaderboard every 2 seconds
-    setInterval(function() {
-        getLeaderboard();
-    }, 2000);
-
-    // Submit form function remains unchanged
-    $("#gameForm").submit(function(e){
-        e.preventDefault();
-
-        var val = $("#val").val();
-
-        $.ajax({
-            type: 'POST',
-            url: '/game',
-            data: { val: val },
-            success: function(response){
-                if (response.continue === "false"){
-                    window.location = "/ended";
-                }
-                $("#profileImage").fadeOut(300, function() {
-                    $(this).attr("src", response.filepath).fadeIn(300);
-                });
-
-                $("#level").fadeOut(300, function() {
-                    $(this).text(response.level).fadeIn(300);
-                });
-
-                $("#tries").fadeOut(300, function() {
-                    $(this).text(response.tries).fadeIn(300);
-                });
-
-                $("#error").text("Success").fadeIn(300).delay(2000).fadeOut(300);
-            },
-            error: function(error){
-                if (error.responseJSON.continue === "false"){
-                    document.body.innerHTML = '';
-
-                    window.location = "/ended";
-                }
-                $("#error").fadeOut(300, function() {
-                    $(this).text("Wrong guess").fadeIn(300).delay(2000).fadeOut(300);
-                });
-                if (error.responseJSON && error.responseJSON.tries) {
-                    $("#tries").fadeOut(300, function() {
-                        $(this).text(error.responseJSON.tries).fadeIn(300);
-                    });
-                }
-            }
-        });
-    });
-});
-</script>
+<script src="{{url_for('static', filename='script/dachboard.js')}}"></script>
 
 </body>
 </html>
