@@ -39,10 +39,10 @@ def game():
 			users.update_user(session["email"],current_level=int(session["level"]))
 			session.pop("filepath")
 			level=session["level"]
-			#filename=name_generator.generate_randomest_string(10)+".png"
-			session["filepath"]="/static/"+"aMOSVKfw0G.png"
-			session["digits"]=["4","2"]
-			#print(session["digits"])
+			filename=name_generator.generate_randomest_string(10)+".png"
+			session["filepath"]="/static/"+filename
+			session["digits"]=generator.generate_and_get_digits(800,600,level,filename)
+			print(session["digits"])
 			level = session.get("level", None)
 			tries = session.get("tries", None)
 			filepath = session.get("filepath", None)
@@ -71,9 +71,9 @@ def game():
 		if session["tries"]==0:
 			return redirect("/ended")
 		if "filepath" not in session:
-			#filename=name_generator.generate_randomest_string(10)+".png"
-			session["filepath"]="/static/"+"aMOSVKfw0G.png"
-			session["digits"]=["4","2"]
+			filename=name_generator.generate_randomest_string(10)+".png"
+			session["filepath"]="/static/"+filename
+			session["digits"]=generator.generate_and_get_digits(800,600,level,filename)
 			print(session["digits"])
 		return render_template("dashboard.html",lvl=session["level"],filename=session["filepath"],tries=session["tries"])
 	else:
