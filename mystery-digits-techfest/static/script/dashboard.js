@@ -69,6 +69,7 @@ $(document).ready(function(){
                 if (response.continue === "false"){
                     window.location = "/ended";
                 }
+                $("#val").val("");
                 $("#profileImage").fadeOut(300, function() {
                     $(this).attr("src", response.filepath).fadeIn(300);
                 });

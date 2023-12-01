@@ -44,7 +44,7 @@ def scatter_numbers_and_shapes(draw, width, height, num_digits, num_complex_shap
 
     for i in range(num_digits):
         digit = str(random.randint(0, 9))
-        x, y = random.randint(20, width - 42), random.randint(20, height - 42)
+        x, y = random.randint(20, width - 100), random.randint(20, height - 100)
         font_size = max(20, base_font_size - i * 10) 
         font = ImageFont.truetype("FreeSans.ttf", int(font_size))
         draw.text((x, y), digit, font=font, fill=random_color())
