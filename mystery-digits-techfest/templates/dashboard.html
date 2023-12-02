@@ -16,7 +16,7 @@
 <div class="congartulation" id="congrats" style="display: none;">
     <div class="right"><i class="fa-solid fa-check"></i></div>
     <h4>Congratulations</h4>
-    <p>You have successfully completed level:<b id="level">{{lvl}}!</b></p>
+    <p>You have successfully completed level:<b id="levels"></b></p>
     <p>Total points:250</p>
     <button class="next_level" onclick="overlay()">Next Level</button>
 </div>
@@ -42,7 +42,7 @@
         <span class="level"><i class="fa-solid fa-arrow-up-right-dots"></i> Level:<b id="level1">{{lvl}}</b></span>
     </div>
     <div class="tries"><i class="fa-regular fa-clock"></i>  No. of tries left:<b id="tries">{{tries}}</b></div>
-    <div class="image_container">
+    <div class="image_container" id="image" onclick="return false">
     <img id="profileImage" onclick="zoom()" class="puzzle" src="{{filename}}">
     </div>
     <form id="gameForm">

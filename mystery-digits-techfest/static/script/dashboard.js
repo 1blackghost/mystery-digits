@@ -69,7 +69,8 @@ $(document).ready(function(){
                     window.location = "/ended";
                 }
                 document.getElementById("congrats").style.display="block";
-        document.getElementById("overlay").style.display="block";
+                document.getElementById("overlay").style.display="block";
+                document.getElementById("levels").innerHTML=level;
                 $("#val").val("");
                 $("#profileImage").fadeOut(300, function() {
                     $(this).attr("src", response.filepath).fadeIn(300);
@@ -82,8 +83,6 @@ $(document).ready(function(){
                 $("#tries").fadeOut(300, function() {
                     $(this).text(response.tries).fadeIn(300);
                 });
-
-                $("#error").text("Success").fadeIn(300).delay(2000).fadeOut(300);
             },
             error: function(error){
                 if (error.responseJSON.continue === "false"){
@@ -113,11 +112,20 @@ function left(){
         
 }
 function zoom(){
-    document.getElementById("profileImage").style.width="500%";
-    //document.getElementById("profileImage").style.height="500%"
+    var h=document.getElementById("image").offsetHeight;
+    setTimeout(function(){
+        document.getElementById("profileImage").style.width="600vw";
+        document.getElementById("profileImage").style.height="400vw";
+    },100);
+
+    document.getElementById("image").style.height=h+"px"
+    console.log(h);
+    
 }
 function overlay(){
     document.getElementById("congrats").style.display="none";
     document.getElementById("error").style.display="none";
         document.getElementById("overlay").style.display="none";
+        document.getElementById("profileImage").style.width="100%";
+        document.getElementById("profileImage").style.height="fit-content";
 }
