@@ -3,6 +3,19 @@ from dbms import users,leader,time_help
 from image_generator import generator
 from packages import name_generator,time
 
+@app.route("/stopTime",methods=["GET","POST"])
+def stopTime():
+	if "start" in session:
+		session["start"]=0
+		return {"status":"ok"},200
+
+@app.route("/resumeTime",methods=["GET","POST"])
+def resumeTime():
+	if "start" in session:
+		if session["start"]==0:
+			session["start"]=time.get_current_time()
+			return {"status":"ok"},200
+
 @app.route("/getL", methods=["GET"])
 def get_leaderboard():
     data = leader.get_all_leaders()
@@ -39,8 +52,6 @@ def game():
 				check.append(1)
 
 		if len(check) == len(session["digits"]):
-
-
 			session["level"]=int(session["level"])+1
 			start=session["start"]
 			end=time.get_current_time()
@@ -48,7 +59,7 @@ def game():
 			read_data=time_help.read_time(email=session["email"])
 			read_data.append(duration)
 			time_help.update_time(email=session["email"],time_list=read_data)	
-			session["start"]=time.get_current_time()
+			session["start"]=0
 			last=leader.get_all_leaders()[-1]
 			if int(last[3])<int(session["level"]):
 				l_data=leader.get_all_leaders()
@@ -56,20 +67,28 @@ def game():
 					if i[2]==session["email"]:
 						l_data.remove(i)
 				avg=0.0
-				for i in read_data:
-					avg=avg+i
-					print(i)
-				avg=avg/len(read_data)
+			for i in read_data:
+				avg = avg + i
+				print(i)
+			avg = avg / len(read_data)
 
-				l_data.append((0,session["name"],session["email"],session["level"],avg,session["pic"]))
-				sorted_data = sorted(l_data, key=lambda x: x[3], reverse=True)
-				
-				for i, item in enumerate(sorted_data):
-					item = list(item)
-					item[0] = i + 1
-					sorted_data[i] = tuple(item)
-				leader.reset_leaderboard()
-				leader.insert_all_leaderboard(sorted_data)
+			# Append the new data to l_data
+			l_data.append((0, session["name"], session["email"], session["level"], avg, session["pic"]))
+
+			# Sort the l_data list by level in descending order and avg time in ascending order
+			sorted_data = sorted(l_data, key=lambda x: (x[3], x[4]))
+
+			# Update the rank (index + 1) in the sorted data
+			for i, item in enumerate(sorted_data):
+				item = list(item)
+				item[0] = i + 1
+				sorted_data[i] = tuple(item)
+
+			# Reset and insert the sorted data into the leaderboard
+			leader.reset_leaderboard()
+			leader.insert_all_leaderboard(sorted_data)
+
+
 			users.update_user(session["email"],current_level=int(session["level"]))
 			session.pop("filepath")
 			level=session["level"]
