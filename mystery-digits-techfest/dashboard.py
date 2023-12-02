@@ -1,13 +1,20 @@
 from main import app,session,request,render_template,redirect,url_for,jsonify
-from dbms import users,leader
+from dbms import users,leader,time_help
 from image_generator import generator
-from packages import name_generator
-
+from packages import name_generator,time
 
 @app.route("/getL", methods=["GET"])
 def get_leaderboard():
     data = leader.get_all_leaders()
-    return jsonify(data)
+    
+    modified_data = []
+    for i in data:
+        modified_tuple = list(i)
+        modified_tuple[4] = time.convert(i[4])
+        modified_data.append(tuple(modified_tuple))
+    
+    return jsonify(modified_data)
+
 
 
 @app.route("/ended")
@@ -35,13 +42,26 @@ def game():
 
 
 			session["level"]=int(session["level"])+1
+			start=session["start"]
+			end=time.get_current_time()
+			duration=time.calculate_duration(start,end)
+			read_data=time_help.read_time(email=session["email"])
+			read_data.append(duration)
+			time_help.update_time(email=session["email"],time_list=read_data)	
+			session["start"]=time.get_current_time()
 			last=leader.get_all_leaders()[-1]
 			if int(last[3])<int(session["level"]):
 				l_data=leader.get_all_leaders()
 				for i in l_data:
 					if i[2]==session["email"]:
 						l_data.remove(i)
-				l_data.append((0,session["name"],session["email"],session["level"],0,session["pic"]))
+				avg=0.0
+				for i in read_data:
+					avg=avg+i
+					print(i)
+				avg=avg/len(read_data)
+
+				l_data.append((0,session["name"],session["email"],session["level"],avg,session["pic"]))
 				sorted_data = sorted(l_data, key=lambda x: x[3], reverse=True)
 				
 				for i, item in enumerate(sorted_data):
@@ -84,6 +104,9 @@ def game():
 		if session["tries"]==0:
 			return redirect("/ended")
 		if "filepath" not in session:
+			if "start" not in session:
+				time_help.insert_time(email=session["email"],time_list=[0.0,0.0])
+				session["start"]=time.get_current_time()
 			filename=name_generator.generate_randomest_string(10)+".png"
 			session["filepath"]="/static/"+"1tG0f2kKY9.png"
 			session["digits"]=["6"]
@@ -97,6 +120,13 @@ def game():
 def logout():
 
 	if "email" in session:
+		if "time" in session:
+			start=session["start"]
+			session.clear()
+			session["time"]=start
 		session.clear()
+
+
+
 
 	return redirect("/")
