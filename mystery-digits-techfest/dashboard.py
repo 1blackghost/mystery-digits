@@ -54,8 +54,8 @@ def game():
 			session.pop("filepath")
 			level=session["level"]
 			filename=name_generator.generate_randomest_string(10)+".png"
-			session["filepath"]="/static/"+filename
-			session["digits"]=generator.generate_and_get_digits(1200,720,level,filename)
+			session["filepath"]="/static/"+"1tG0f2kKY9.png"
+			session["digits"]=["6"]
 			print(session["digits"])
 			level = session.get("level", None)
 			tries = session.get("tries", None)
@@ -85,8 +85,8 @@ def game():
 			return redirect("/ended")
 		if "filepath" not in session:
 			filename=name_generator.generate_randomest_string(10)+".png"
-			session["filepath"]="/static/"+filename
-			session["digits"]=generator.generate_and_get_digits(800,600,level,filename)
+			session["filepath"]="/static/"+"1tG0f2kKY9.png"
+			session["digits"]=["6"]
 			print(session["digits"])
 		return render_template("dashboard.html",lvl=session["level"],filename=session["filepath"],tries=session["tries"])
 	else:
