@@ -2,7 +2,7 @@ html,body{
     margin: 0px;
 }
     .container{
-        height: 100vh;
+        height: 100%;
         width: 100vw;
         background-image: url("../images/BG.png");
         background-size: cover;
@@ -13,7 +13,7 @@ html,body{
         height: fit-content;
     }
     .logo{
-        width: 55px;
+        width: 45px;
         height: fit-content;
         padding: 20px;
     }
@@ -22,16 +22,17 @@ html,body{
         text-shadow:  2px 2px 10px white;
         font-family: 'Roboto Mono', monospace;
         text-align: center;
-        font-size: 30px;
+        font-size: 25px;
         margin-bottom: 0px;
+        margin-top: 0px;
     }
     h2{
         color: white;
         font-family: 'Roboto Mono', monospace;
-        font-size: 60px;
+        font-size: 45px;
         text-align: center;
-        margin-top: 20px;
-        margin-bottom: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
         font-weight: 500;
 
     }
@@ -39,8 +40,8 @@ html,body{
         text-align:center ;
         color: grey;
         font-family: 'Roboto Mono', monospace;
-        font-size: 18px;
-        margin: 30px auto;
+        font-size: 15px;
+        margin: 15px auto;
     }
     .registration_info{
         width: 90%;
@@ -51,9 +52,9 @@ html,body{
         flex-direction: column;
     }
     .fee,.price{
-        font-size: 22px;
+        font-size: 18px;
         color: rgba(245, 245, 245, 0.836);
-        padding: 15px 10px;
+        padding: 10px 10px;
         font-family: 'Roboto Mono', monospace;
         font-weight: 500;
     }
@@ -67,7 +68,7 @@ html,body{
         color: black;
         font-family: 'Roboto Mono', monospace;
         font-weight: bold;
-        font-size: 25px;
+        font-size: 18px;
         padding: 10px 0px;
         border-radius: 10px;
     }

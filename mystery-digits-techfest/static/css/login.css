@@ -14,15 +14,16 @@ html,body{
         height: fit-content;
     }
     .logo{
-        width: 55px;
+        width: 45px;
         height: fit-content;
         padding: 20px;
     }
     h2{
         float: right;
         font-family: 'Roboto Mono', monospace;
-        padding: 20px;
-        font-size: 20px;
+        padding: 10px;
+        margin-right: 10px;
+        font-size: 18px;
     }
     .rules{
         width: 86%;
@@ -37,17 +38,20 @@ html,body{
         margin-top: 10px;
         margin-left: 0px;
         margin-bottom: 10px;
-        font-size: 45px;
+        font-size: 35px;
     }
     p{
         text-align:left ;
         color: rgb(53, 53, 53);
         font-family: 'Roboto Mono', monospace;
-        font-size: 20px;
+        font-size: 15px;
     }
     .accept{
         width: 86%;
         margin:auto 7%;
+        position: fixed;
+        bottom: 0;
+        background-color: whitesmoke;
     }
     span{
         font-size: 15px;
@@ -81,7 +85,7 @@ html,body{
     /**login page start here**/
     .login_container{
         width: 100vw;
-        height: 100vh;
+        height: 100%;
         background-image: url("../images/BG\ Login.png");
         background-size: cover;
         background-repeat: no-repeat;
@@ -92,30 +96,36 @@ html,body{
         color: whitesmoke;
         font-family: 'Roboto Mono', monospace;
         text-align: center;
-        font-size: 30px;
+        font-size: 25px;
         font-weight: 500;
+        margin: 10px 0px;
     }
     .login{
         width: 84%;
         margin: auto 8%;
         text-align: center;
-        margin-top: 150px;
+        margin-top: 100px;
+        height: 100%;
     }
     h5{
-        font-size: 40px;
+        font-size: 30px;
         font-family: 'Roboto Mono', monospace;
         margin-bottom: 20px;
+        margin-top: 0px;
         color: rgb(75, 75,75);
+    }
+    #continue-with-google{
+        visibility: hidden;
     }
     .name,.number,.next{
         width: 100%;
         height: 50px;
-        margin: 15px 0px;
+        margin: 20px 0px;
         border: none;
         outline: none;
         border-bottom: 1px solid gray;
         background-color: transparent;
-        font-size: 20px;
+        font-size: 15px;
         font-family: 'Roboto Mono', monospace;
         transition: 0.5s;
     }
@@ -177,7 +187,7 @@ html,body{
         display: block;
         text-align: center;
         width: 100%;
-        margin-top: 7vh;
+        margin-top: calc(100vh - 650px);
         font-weight: bolder;
         color: rgb(94, 94, 94);
         font-size: medium;
