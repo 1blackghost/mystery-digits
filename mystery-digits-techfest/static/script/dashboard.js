@@ -60,7 +60,6 @@ $(document).ready(function(){
         e.preventDefault();
 
         var val = $("#val").val();
-
         $.ajax({
             type: 'POST',
             url: '/game',
@@ -69,6 +68,8 @@ $(document).ready(function(){
                 if (response.continue === "false"){
                     window.location = "/ended";
                 }
+                document.getElementById("congrats").style.display="block";
+        document.getElementById("overlay").style.display="block";
                 $("#val").val("");
                 $("#profileImage").fadeOut(300, function() {
                     $(this).attr("src", response.filepath).fadeIn(300);
@@ -91,7 +92,8 @@ $(document).ready(function(){
                     window.location = "/ended";
                 }
                 $("#error").fadeOut(300, function() {
-                    $(this).text("Wrong guess").fadeIn(300).delay(2000).fadeOut(300);
+                    document.getElementById("error").style.display="block";
+                    document.getElementById("overlay").style.display="block";
                 });
                 if (error.responseJSON && error.responseJSON.tries) {
                     $("#tries").fadeOut(300, function() {
@@ -102,3 +104,20 @@ $(document).ready(function(){
         });
     });
 });
+function left(){
+    var n=document.getElementById("val").value.length + 1; 
+    var l=level.innerHTML;
+    l=l[0];
+    var left=l-n;
+        console.log(left)
+        
+}
+function zoom(){
+    document.getElementById("profileImage").style.width="500%";
+    //document.getElementById("profileImage").style.height="500%"
+}
+function overlay(){
+    document.getElementById("congrats").style.display="none";
+    document.getElementById("error").style.display="none";
+        document.getElementById("overlay").style.display="none";
+}

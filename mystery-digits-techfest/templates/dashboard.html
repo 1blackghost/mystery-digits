@@ -18,19 +18,19 @@
     <h4>Congratulations</h4>
     <p>You have successfully completed level:<b id="level">{{lvl}}!</b></p>
     <p>Total points:250</p>
-    <button class="next_level">Next Level</button>
+    <button class="next_level" onclick="overlay()">Next Level</button>
 </div>
 <div class="error" id="error">
     <div class="right"><i class="fa-solid fa-xmark"></i></div>
     <h4>Error</h4>
     <p>Operation could not be <br> Completed</p>
-    <button class="next_level">Try Again</button>
+    <button class="next_level" onclick="overlay()">Try Again</button>
 </div>
 </div>
 
 <div class="option">
-    <button class="home" id="home" onclick="opt('0','80px','grey','black','homepage','leaderboardpage')">Home</button>
-    <button class="leaderboard" id="leadbod" onclick="opt('calc(100% - 195px)','195px','black','grey','leaderboardpage','homepage')">Leaderboard</button>
+    <button class="home" id="home" onclick="opt('0','62px','grey','black','homepage','leaderboardpage')">Home</button>
+    <button class="leaderboard" id="leadbod" onclick="opt('calc(100% - 146px)','146px','black','grey','leaderboardpage','homepage')">Leaderboard</button>
     <span class="selection_line" id="line"></span>
 </div>
 
@@ -42,9 +42,12 @@
         <span class="level"><i class="fa-solid fa-arrow-up-right-dots"></i> Level:<b id="level1">{{lvl}}</b></span>
     </div>
     <div class="tries"><i class="fa-regular fa-clock"></i>  No. of tries left:<b id="tries">{{tries}}</b></div>
-    <img id="profileImage" class="puzzle" src="{{filename}}">
+    <div class="image_container">
+    <img id="profileImage" onclick="zoom()" class="puzzle" src="{{filename}}">
+    </div>
     <form id="gameForm">
-    <input type="number" id="val" class="answer" placeholder="Enter the numbers found" name="levelInput" required>
+    <input type="number" id="val" onkeypress="left()" class="answer" placeholder="Enter the numbers found" name="levelInput" required>
+    <p id="left"></p>
     <button type="submit" class="submit">Submit</button>
 </form>
 </div>

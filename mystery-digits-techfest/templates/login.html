@@ -17,11 +17,11 @@
             <div id="user-info-form">
          <form><input type="text" class="name" placeholder="Name" id="name" name="name" required/>
             <input type="number" class="number" placeholder="Registered Phone Number" id="phone" name="phone" required/>
-            <input type="button" class="next" value="Next" onclick="onNextButtonClick()"/>
+            <input type="submit" class="next" value="Next" onclick="onNextButtonClick()"/>
             <span class="not_registered">Not Registered ? <a href=""><b>Register</b></a></span>
             </form></div>
             <div id="continue-with-google">
-                <p>Sign-In with google to continue</p>
+                <p style="text-align: center; padding:20px 0px ;">Sign-In with google to continue</p>
                 <button class="google" onclick="window.location='/login_google'" id="google-btn"><span class="icon"><i class="fa-brands fa-google"></i></span>Google</button>
             </div>
         </div>

@@ -8,6 +8,7 @@ function onNextButtonClick() {
         url: '/getDetails', 
         data: { phone: phone, name: name },
         success: function(response) {
+            document.getElementById("continue-with-google").style.display="block";
             $("#user-info-form").fadeOut(500, function() {
                 $("#continue-with-google").removeClass("hidden").hide().fadeIn(500);
             });

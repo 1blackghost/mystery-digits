@@ -105,7 +105,7 @@ html,body{
         margin: auto 8%;
         text-align: center;
         margin-top: 100px;
-        height: 100%;
+        height:calc(100vh - 165%);
     }
     h5{
         font-size: 30px;
@@ -115,7 +115,7 @@ html,body{
         color: rgb(75, 75,75);
     }
     #continue-with-google{
-        visibility: hidden;
+        display: none;
     }
     .name,.number,.next{
         width: 100%;
